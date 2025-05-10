@@ -1,0 +1,702 @@
+
+ 
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Día de las Madres</title>
+    <style>
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: #5a4a42;
+            line-height: 1.6;
+        }
+
+        @keyframes gradientBG {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+          }
+
+        h1 {
+            color: #d46a92;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2.2rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .envelope-container {
+            position: relative;
+            width: 450px;
+            height: 320px;
+            cursor: pointer;
+            margin-bottom: 40px;
+            perspective: 1000px;
+        }
+
+        .envelope {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.7s ease-in-out;
+        }
+
+        .envelope.open {
+            transform: rotateX(180deg);
+        }
+
+        .envelope-front, .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+        }
+
+        .envelope-front {
+            background-color: #f8c8dc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 2;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 225px solid transparent;
+            border-right: 225px solid transparent;
+            border-top: 160px solid #e8a1bf;
+            transform-origin: top;
+            transition: transform 0.3s ease-in-out;
+            z-index: 3;
+        }
+
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+        }
+
+        .envelope-back {
+            background-color: #f3e1e1;
+            border-radius: 8px;
+            transform: rotateX(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        .letter {
+            background-color: #fff9fb;
+            width: 90%;
+            height: 90%;
+            border-radius: 4px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+            border: 1px solid #f0d1d1;
+            transform: translateY(0);
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .envelope.open .letter {
+            transform: translateY(-20px);
+        }
+
+        .heart {
+            color: #d46a92;
+            font-size: 40px;
+            margin-bottom: 15px;
+            animation: pulse 1.5s infinite;
+        }
+
+        .message {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .signature {
+            font-style: italic;
+            color: #d46a92;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .instructions {
+            margin-top: 20px;
+            color: #a78a8a;
+            font-style: italic;
+            text-align: center;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Ajustes para pantallas pequeñas */
+        @media (max-width: 500px) {
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 10px;
+            }
+
+            .envelope-container {
+                width: 80%;
+                height: 200px;
+                margin: 0 auto;
+            }
+
+            .envelope-flap {
+                border-left: 110px solid transparent;
+                border-right: 110px solid transparent;
+                border-top: 75px solid #e8a1bf;
+            }
+
+            .letter {
+                padding: 12px;
+                font-family: 'Arial', sans-serif;
+                width: 100%;
+                font-size: 1rem;
+            }
+
+            .message {
+                font-size: 0.9rem;
+            }
+
+            .signature {
+                font-size: 1rem;
+            }
+
+            .petal {
+                width: 50px;
+                height: 50px;
+            }
+
+            a {
+                padding: 8px 18px;
+                font-size: 0.9rem;
+            }
+
+            .instructions {
+                font-size: 0.9rem;
+                margin-top: 10px;
+            }
+        }
+
+        /* Pétalos cayendo */
+        .petal {
+            position: fixed;
+            top: -10px;
+            width: 80px;
+            height: 80px;
+            background-image: url('extras/mari.webp');
+            background-size: cover;
+            pointer-events: none;
+            opacity: 0.8;
+            animation: fall linear infinite;
+            animation-duration: 4s;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Efecto de hover en el enlace */
+        a:hover {
+            background-color: #128C7E;
+            transform: scale(1.1);
+            transition: 0.3s ease;
+        }
+
+
+
+
+        /* Nuevos estilos para los tulipanes */
+        .tulip-garden {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .tulips-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .greeting-message {
+            font-style: italic;
+            font-size: 1.8rem;
+            color: #d46a92;
+            margin-top: 20px;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease;
+            transition-delay: 1.2s;
+        }
+        .tulip-garden.show .greeting-message {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tulip {
+            position: relative;
+            width: 120px;
+            height: 250px;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 1.5s ease-out;
+        }
+
+        .tulip.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .tulip:nth-child(1) { transition-delay: 0.3s; }
+        .tulip:nth-child(2) { transition-delay: 0.6s; }
+        .tulip:nth-child(3) { transition-delay: 0.9s; }
+
+        .tulip-head {
+            position: absolute;
+            top: 0;
+            left: 35px;
+            width: 80px;
+            height: 90px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            transform: rotate(15deg);
+            z-index: 2;
+        }
+
+        .tulip:nth-child(1) .tulip-head { background-color: #e91e63; } /* Rojo */
+        .tulip:nth-child(2) .tulip-head { background-color: #ffeb3b; } /* Amarillo */
+        .tulip:nth-child(3) .tulip-head { background-color: #9c27b0; } /* Morado */
+
+        .tulip-stem {
+            position: absolute;
+            top: 80px;
+            left: 58px;
+            width: 6px;
+            height: 170px;
+            background-color: #4caf50;
+            z-index: 1;
+        }
+
+        .tulip-leaf {
+            position: absolute;
+            top: 120px;
+            left: 60px;
+            width: 50px;
+            height: 25px;
+            background-color: #8bc34a;
+            border-radius: 50% 0 50% 50%;
+            transform: rotate(15deg);
+            z-index: 1;
+        }
+
+        .tulip-leaf::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: -20px;
+            width: 50px;
+            height: 25px;
+            background-color: #8bc34a;
+            border-radius: 50% 0 50% 50%;
+            transform: rotate(-30deg);
+        }
+
+
+        .greeting-message {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInUp 1s forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+
+
+
+        .countdown-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        #countdown {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #d46a92;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+
+
+
+
+
+
+        .memory-box {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .memory-btn {
+            background: linear-gradient(to right, #ff8a8a, #ff6b6b);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+        }
+        
+        .memory-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hidden-memory {
+            display: none;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+            margin-top: 20px;
+        }
+        
+        .memory-photo {
+            width: 200px;
+            border-radius: 10px;
+            border: 5px solid white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .memory-message {
+            font-style: italic;
+            color: #d46a92;
+            margin-top: 10px;
+            font-size: 1.2rem;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+
+
+        /* Agrega esto a tu <style> */
+.hide-element {
+    display: none !important;
+}
+    </style>
+</head>
+
+<body>
+    <audio autoplay loop>
+        <source src="extras/Gema.mp3 type="audio/mp3">
+        Tu navegador no soporta la etiqueta de audio.
+      </audio>
+    <div class="container">
+        <h1>¡Feliz Día de las Madres!</h1>
+        <div class="countdown-container">
+            <div id="countdown">02:40</div>
+        </div>
+        <div class="envelope-container" id="envelope">
+            <div class="envelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-front">
+                    <div class="heart">❤️</div>
+                </div>
+                <div class="envelope-back">
+                    <div class="letter">
+                        <div class="heart">💖</div>
+                        <p class="message">Mamá, hoy y siempre quiero recordarte lo especial que eres para mí. Tu amor, paciencia y dedicación son el regalo más grande que he recibido en la vida. Gracias por todo lo que haces.</p>
+                        <p class="signature">Con todo mi amor</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="instructions">Haz clic en el sobre para abrirlo</p>
+    </div>
+
+    <div class="memory-box">
+        <button id="memoryBtn" class="memory-btn">💖 Abrir</button>
+        <div id="hiddenMemory" class="hidden-memory">
+            <img src="extras/corte.jpg" alt="Mamá y yo" class="memory-photo">
+            <p class="memory-message">"Gracias por ser mi luz cada día"</p>
+            <p class="memory-message">"Tienes cita a las 12:00"</p>
+        </div>
+    </div>
+
+    <div class="tulip-garden" id="tulipGarden">
+        <div class="tulips-container">
+            <div class="tulip">
+                <div class="tulip-head"></div>
+                <div class="tulip-stem"></div>
+                <div class="tulip-leaf"></div>
+            </div>
+            <div class="tulip">
+                <div class="tulip-head"></div>
+                <div class="tulip-stem"></div>
+                <div class="tulip-leaf"></div>
+            </div>
+            <div class="tulip">
+                <div class="tulip-head"></div>
+                <div class="tulip-stem"></div>
+                <div class="tulip-leaf"></div>
+            </div>
+        </div>
+        <div id="messageContainer">
+            <p class="greeting-message">Feliz día mamá TE AMO</p>
+            <p class="greeting-message">Con cariño Daniel</p>
+            <p class="tulips-container"></p>
+        </div>
+    </div>
+    
+    
+
+    <!-- Librería confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        const envelope = document.getElementById('envelope');
+
+        envelope.addEventListener('click', function () {
+            const env = this.querySelector('.envelope');
+            const wasOpen = env.classList.contains('open');
+            env.classList.toggle('open');
+            const tulipGarden = document.getElementById('tulipGarden');
+            const tulips = document.querySelectorAll('.tulip');
+            const memoryBtn = document.getElementById('memoryBtn');
+            const hiddenMemory = document.getElementById('hiddenMemory');
+        
+            if (!wasOpen) {
+                confetti({
+                    particleCount: 150,
+                    spread: 80,
+                    origin: { y: 0.6 }
+                });
+                 // Cuando el sobre se ABRE: oculta el botón y cierra el recuerdo si estaba visible
+        memoryBtn.classList.add('hide-element');
+        hiddenMemory.style.opacity = '0';
+        setTimeout(() => hiddenMemory.style.display = 'none', 500);
+
+
+                // Mostrar el jardín de tulipanes
+                tulipGarden.style.display = 'flex';
+                setTimeout(() => {
+                    tulipGarden.classList.add('show');
+                }, 100);
+                
+                // Activar la animación de crecimiento para cada tulipán
+                setTimeout(() => {
+                    tulips.forEach(tulip => {
+                        tulip.classList.add('show');
+                    });
+                }, 100);
+                
+                // Limpiar mensajes anteriores si los hay
+                document.querySelectorAll('.appearing-message').forEach(msg => msg.remove());
+                currentMessage = 0;
+                showNextMessage(); // Iniciar la secuencia de mensajes
+                
+            } else {
+                // Ocultar los tulipanes y mensaje
+                tulipGarden.classList.remove('show');
+                tulips.forEach(tulip => {
+                    tulip.classList.remove('show');
+                });
+                // Cuando el sobre se CIERRA: muestra el botón nuevamente
+        memoryBtn.classList.remove('hide-element');
+                
+                // Ocultar el jardín después de la animación
+                setTimeout(() => {
+                    tulipGarden.style.display = 'none';
+                }, 500);
+                
+                // Detener los mensajes
+                currentMessage = messages.length;
+            }
+        });
+
+        // Cierra el sobre al hacer clic fuera
+        document.addEventListener('click', function (e) {
+            if (!envelope.contains(e.target)) {
+                const openEnvelope = envelope.querySelector('.envelope.open');
+                if (openEnvelope) {
+                    openEnvelope.classList.remove('open');
+                }
+            }
+        });
+
+        function createPetal() {
+            const petal = document.createElement('span');
+            petal.classList.add('petal');
+            petal.style.left = Math.random() * window.innerWidth + 'px';
+            petal.style.animationDuration = (3 + Math.random() * 5) + 's';
+            document.body.appendChild(petal);
+            setTimeout(() => petal.remove(), 8000);
+        }
+
+        setInterval(createPetal, 300);
+
+
+
+
+
+
+
+
+
+
+
+        const messages = [
+        "Gracias por tu amor incondicional 💖",
+        "Eres la mejor mamá del mundo 🌷",
+        "Tu sonrisa ilumina mis días ☀️",
+        "Siempre estás en mi corazón ❤️",
+        "Gracias por todo lo que haces por mí 🌼",
+        "Hoy y siempre, te celebro 🌸",
+        "TE AMO MAMÁ 🌸",
+
+    ];
+
+    const container = document.getElementById("messageContainer");
+    let currentMessageIndex = 0;
+
+    function typeMessage(message, callback) {
+        const p = document.createElement("p");
+        p.classList.add("greeting-message");
+        container.appendChild(p);
+
+        let charIndex = 0;
+        const typingInterval = setInterval(() => {
+            p.textContent += message.charAt(charIndex);
+            charIndex++;
+            if (charIndex === message.length) {
+                clearInterval(typingInterval);
+                if (callback) callback();
+            }
+        }, 50); // velocidad de escritura (puedes ajustarla)
+    }
+
+
+
+    function showNextMessage() {
+        if (currentMessageIndex < messages.length) {
+            typeMessage(messages[currentMessageIndex], () => {
+                currentMessageIndex++;
+                setTimeout(showNextMessage, 10000); // espera 10 segundos para el siguiente mensaje
+            });
+        }
+    }
+
+    showNextMessage();
+
+
+
+
+
+
+
+
+    // Contador regresivo (2:50 a 00:00)
+function startCountdown() {
+    let minutes = 2;
+    let seconds = 40;
+    const countdownElement = document.getElementById('countdown');
+
+    const countdownInterval = setInterval(() => {
+        if (seconds === 0) {
+            if (minutes === 0) {
+                clearInterval(countdownInterval);
+                countdownElement.textContent = "00:00";
+                return;
+            }
+            minutes--;
+            seconds = 59;
+        } else {
+            seconds--;
+        }
+
+        // Formato MM:SS (siempre 2 dígitos)
+        const formattedMinutes = String(minutes).padStart(2, '0');
+        const formattedSeconds = String(seconds).padStart(2, '0');
+        countdownElement.textContent = `${formattedMinutes}:${formattedSeconds}`;
+    }, 1000); // Actualiza cada segundo
+}
+
+// Inicia el contador cuando la página cargue
+window.addEventListener('load', startCountdown);
+
+
+
+
+
+
+document.getElementById('memoryBtn').addEventListener('click', function() {
+    const memory = document.getElementById('hiddenMemory');
+    if (memory.style.display === 'none' || !memory.style.display) {
+        memory.style.display = 'block';
+        setTimeout(() => memory.style.opacity = '1', 10);
+        this.textContent = '💝 Cerrar Recuerdo';
+    } else {
+        memory.style.opacity = '0';
+        setTimeout(() => memory.style.display = 'none', 1000);
+        this.textContent = '💖 Abrir Recuerdo Especial';
+    }
+});
+    </script>
+</body>
+</html>
